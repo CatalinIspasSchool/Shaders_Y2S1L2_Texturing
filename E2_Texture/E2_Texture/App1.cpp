@@ -4,8 +4,8 @@
 
 App1::App1()
 {
-	mesh = nullptr;
-	textureShader = nullptr;
+	bunnyMesh = nullptr;
+	bunnyTextureShader = nullptr;
 }
 
 void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeight, Input *in, bool VSYNC, bool FULL_SCREEN)
@@ -13,11 +13,12 @@ void App1::init(HINSTANCE hinstance, HWND hwnd, int screenWidth, int screenHeigh
 	// Call super/parent init function (required!)
 	BaseApplication::init(hinstance, hwnd, screenWidth, screenHeight, in, VSYNC, FULL_SCREEN);
 
+	textureMgr->loadTexture(L"bunny", L"res/bunny.png");
 	textureMgr->loadTexture(L"brick", L"res/brick1.dds");
 
 	// Create Mesh object and shader object
-	mesh = new TexturedQuad(renderer->getDevice(), renderer->getDeviceContext());
-	textureShader = new TextureShader(renderer->getDevice(), hwnd);
+	bunnyMesh = new TexturedQuad(renderer->getDevice(), renderer->getDeviceContext());
+	bunnyTextureShader = new TextureShader(renderer->getDevice(), hwnd);
 
 }
 
@@ -28,17 +29,17 @@ App1::~App1()
 	BaseApplication::~BaseApplication();
 
 	// Release the Direct3D object.
-	if (mesh)
+	if (bunnyMesh)
 	{
-		delete mesh;
-		mesh = 0;
+		delete bunnyMesh;
+		bunnyMesh = 0;
+	}
+	if (bunnyTextureShader)
+	{
+		delete bunnyTextureShader;
+		bunnyTextureShader = 0;
 	}
 
-	if (textureShader)
-	{
-		delete textureShader;
-		textureShader = 0;
-	}
 }
 
 
@@ -78,9 +79,10 @@ bool App1::render()
 	projectionMatrix = renderer->getProjectionMatrix();
 
 	// Send geometry data, set shader parameters, render object with shader
-	mesh->sendData(renderer->getDeviceContext());
-	textureShader->setShaderParameters(renderer->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, textureMgr->getTexture(L"brick"));
-	textureShader->render(renderer->getDeviceContext(), mesh->getIndexCount());
+	bunnyMesh->sendData(renderer->getDeviceContext());
+	bunnyTextureShader->setShaderParameters(renderer->getDeviceContext(), worldMatrix, viewMatrix, projectionMatrix, textureMgr->getTexture(L"bunny"));
+	bunnyTextureShader->render(renderer->getDeviceContext(), bunnyMesh->getIndexCount());
+	
 
 	// Render GUI
 	gui();

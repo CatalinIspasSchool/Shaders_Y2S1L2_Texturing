@@ -22,8 +22,8 @@ protected:
 	void gui();
 
 private:
-	TextureShader* textureShader;
-	TexturedQuad* mesh;
+	TextureShader* bunnyTextureShader;
+	TexturedQuad* bunnyMesh;
 };
 
 #endif
